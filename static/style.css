@@ -1,0 +1,93 @@
+body, h1
+{
+    margin:0;
+    padding:0;
+}
+
+body
+{
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+h1
+{
+    text-align: center;
+    color: #800080;
+    background-color: #f0f0f0;
+    padding: 20px;
+}
+
+.content
+{
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+}
+
+form
+{
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(139, 13, 218, 0.1) ;
+}
+
+form p
+{
+    margin: 10px 0;
+}
+
+input[type = "text"]
+{
+    width: 95%;
+    padding: 10px ;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type = "radio"]
+{
+    margin-right: 5px;
+}
+
+button
+{
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+button:hover
+{
+    background-color: rgb(13, 140, 13)
+}
+
+.todo
+{
+    background-color: #f9f9f9;
+    padding: 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(139, 13, 218, 0.1);
+}
+
+.todo
+{
+    max-width: 800px;
+    margin: auto;
+    padding: 20px;
+}
+
+.todo p
+{
+    margin: 0;
+}
+
+.todo i
+{
+    color: #888;
+}
+

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang = "en">
+    <head>
+        <meta charset = "UTF-8">
+        <meta name = "viewport", content = "width = device-width, initial-scale = 1.0">
+        <title>TaskTracker Pro</title>
+        <link rel = "stylesheet" href = "{{url_for('static', filename = 'style.css')}}">
+        <!-- <link rel = "stylesheet" href = "style.css"> -->
+        <script>
+        
+            function validateUrgency() 
+            {
+                const lowPriority = document.getElementById('degree-2').checked;
+                const urgentCheckbox = document.getElementById('additional-0');
+
+                if (lowPriority) 
+                {
+                    urgentCheckbox.checked = false;
+                    urgentCheckbox.disabled = true;
+                } 
+                else 
+                {
+                    urgentCheckbox.disabled = false;
+                }
+            }
+
+
+            function toggleDeadlineInput()
+            {
+                const timeSensitiveCheckbox = document.getElementById('additional-1')
+                const deadlineInput = document.getElementById('deadline-input')
+
+                if ( timeSensitiveCheckbox.checked)
+                {
+                    deadlineInput.style.display = 'block'
+                    setMinDate();
+                }
+                else
+                {
+                    deadlineInput.style.display = 'none'
+                }
+            }
+
+            function setMinDate() 
+            {
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+                const day = String(now.getDate()).padStart(2, '0');
+                const hours = String(now.getHours()).padStart(2, '0');
+                const minutes = String(now.getMinutes()).padStart(2, '0');
+                const minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+                
+                document.getElementById('deadline').setAttribute('min', minDateTime);
+            }
+
+            // Ensure min date is set when the page loads
+            window.onload = function() {
+                setMinDate();
+            };
+            
+        </script>
+    </head>
+    <body>
+        <h1>TaskTracker Pro</h1>
+        <div class = "content">
+            <hr>
+            <form method = "POST">
+                <p>
+                    <b><label for = "content">Todo List </label></b> 
+                </p>
+                <p>
+                    <input type = "text", name = "content", placeholder = "Add todo... "
+                            required>
+                </p>
+                <p>
+                    <b><label for = "degree">Importance</label></b>
+                </p>
+                <p>
+                    <input 
+                    id = "degree-0"
+                    name = "degree"
+                    required
+                    type = "radio"
+                    value = "High Priority"
+                    onclick = "validateUrgency()">
+                    <label for = "degree-0">High Priority</label>
+                </p>
+                <p>
+                    <input
+                    id = "degree-1"
+                    name = "degree"
+                    required
+                    type = "radio"
+                    value = "Medium priority"
+                    onclick = "validateUrgency()">
+                    <label for = "dergree-1">Medium Priority</label>
+                </p>
+                <p>
+                    <input 
+                    id = "degree-2"
+                    name = "degree"
+                    required 
+                    type = "radio"
+                    value = "Low Priority"
+                    onclick = "validateUrgency()">
+                    <label for = "degree-2">Low Priority</label>
+                </p>
+                <p>
+                    <b><label for = "timeline">Task Timeline</label></b>
+                </p>
+                <p>
+                    <input 
+                    id = "timeline-0"
+                    name = "timeline"
+                    required
+                    type = "radio"
+                    value = "Long-term">
+                    <label for = "timeline-0">Long-term Task</label>
+                </p>
+                <p>
+                    <input
+                    id = "timeline-1"
+                    name = "timeline"
+                    required
+                    type = "radio"
+                    value = "Short-term">
+                    <label for = "timeline-1">Short-term Task</label>
+                </p>
+                <p>
+                    <b><label for = "additional">Additional Information</label></b>
+                </p>
+                <p>
+                    <input 
+                    id = "additional-0"
+                    name = "additional"
+                    type = "checkbox"
+                    value = "Urgent">
+                    <label for = "Urgent">Urgent</label>
+                </p>
+                <p>
+                    <input 
+                    id = "additional-1"
+                    name = "additional"
+                    type = "checkbox"
+                    value = "Time-sensitive"
+                    onclick = "toggleDeadlineInput()">
+                    <label for = "additional-1">Time-sensitive</label>
+                </p>
+                <div id = "deadline-input" style = "display : none;">
+                    <p>
+                        <b><label for = "dealine">Enter Deadline</label></b>
+                    </p>
+                    <p>
+                        <input 
+                        id = "deadline"
+                        name = "deadline"
+                        type = "datetime-local">
+                    </p>
+                </div>
+                <button type = "submit">Submit</button>
+            </form>
+            <hr>
+        </div>
+
+        <!--Fetching the todo documet -->
+        {% for todo in todos %}
+        <div class = "todo">
+            <b><p>{{ todo['content'] }}</p></b>
+            <p>{{ todo['degree'] }} | {{ todo['timeline'] }} 
+                {% if todo['additional'] %}
+                    | {{ todo['additional'] | join_with_pipe }}
+                {% endif %}
+            </p>
+            
+                {% if todo['deadline']%}
+                <p></p><i>{{ todo['deadline'] | format_datetime }}</i></p>
+                {% endif %}
+
+            <!-- Delete a task from the collection -->
+            <form method = "POST"
+                action = "{{url_for('delete', id = todo['_id']) }}">
+                <input 
+                    type = "submit"
+                    value = "Delete Task"
+                    onClick = "return confirm('Are you sure you have complete the task?')" />
+            </form>
+        </div>
+        {% endfor %}
+
+    </body>
+</html>
